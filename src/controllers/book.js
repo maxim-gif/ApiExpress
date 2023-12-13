@@ -1,20 +1,23 @@
-const User = require('../models/user');
+const Book = require('../models/book');
 
-const getUsers = (request, response) => {
-    User.find({})
-        .then(user => {
-            response.status(200).send(user);
+const getBooks = (request, response) => {
+    Book.find({})
+        .then(book => {
+            response.status(200).send(book);
         })
         .catch(e => {
+            if (e.message.search("Cast to ObjectId failed for value") !== -1) {
+                return response.status(404).send("Несуществующий путь")
+            }
             response.status(500).send(e.message);
         });
 }
 
-const getUser = (request, response) => {
-    const { user_id } = request.params;
-    User.findById(user_id)
-        .then(user => {
-            response.status(200).send(user);
+const getBook = (request, response) => {
+    const { book_id } = request.params;
+    Book.findById(book_id)
+        .then(book => {
+            response.status(200).send(book);
         })
         .catch(e => {
             if (e.message.search("Cast to ObjectId failed for value") !== -1) {
@@ -24,23 +27,23 @@ const getUser = (request, response) => {
         });
 }
 
-const createUser = (request, response) => {
+const createBook = (request, response) => {
     const data = request.body;
-    User.create(data)
-        .then(user => {
-            response.status(201).send(user);
+    Book.create(data)
+        .then(book => {
+            response.status(201).send(book);
         })
         .catch(e => {
             response.status(500).send(e.message);
         });
 }
 
-const updateUser = (request, response) => {
-    const { user_id } = request.params;
+const updateBook = (request, response) => {
+    const { book_id } = request.params;
     const data = request.body;
-    User.findByIdAndUpdate(user_id, data, { new: true, runValidators: true })
-        .then(user => {
-            response.status(200).send(user);
+    Book.findByIdAndUpdate(book_id, data, { new: true, runValidators: true })
+        .then(book => {
+            response.status(200).send(book);
         })
         .catch(e => {
             if (e.message.search("Cast to ObjectId failed for value") !== -1) {
@@ -50,10 +53,10 @@ const updateUser = (request, response) => {
         });
 }
 
-const deleteUser = (request, response) => {
-    const { user_id } = request.params;
-    User.findByIdAndDelete(user_id)
-        .then(user => {
+const deleteBook = (request, response) => {
+    const { book_id } = request.params;
+    Book.findByIdAndDelete(book_id)
+        .then(book => {
             response.status(200).send("Done");
         })
         .catch(e => {
@@ -64,4 +67,4 @@ const deleteUser = (request, response) => {
         });
 }
 
-module.exports = {getUsers, getUser, createUser, updateUser, deleteUser}
+module.exports = {getBooks, getBook, createBook, updateBook, deleteBook}

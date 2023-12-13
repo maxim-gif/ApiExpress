@@ -1,10 +1,12 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
-const cors = require('cors')
+
+const loggerUrl = require('./middleware/loggerUrl')
+const cors = require('./middleware/cors')
 const userRouter = require('./routes/user')
-const logger1 = require('./middleware/logger1')
-const logger2 = require('./middleware/logger2')
+const bookRouter = require('./routes/book')
+
 const mongoose = require('mongoose');
 
 
@@ -17,22 +19,17 @@ const { PORT = 3000, API_URL = 'http://127.0.0.1', MONGO_URL = 'mongodb://127.0.
 
 mongoose.connect(MONGO_URL).catch(error => handleError(error));
 
-app.use(cors())
+
+app.use(loggerUrl)
+app.use(cors)
 app.use(bodyParser.json());
 app.use(userRouter)
+app.use(bookRouter)
 
 
 app.get('/', (request, response) => {
     response.status(200);
     response.send("Hello, World!");
-});
-
-app.use(logger1)
-app.use(logger2)
-
-app.post('/', (request, response) => {
-    response.status(200);
-    response.send("Hello, Post");
 });
 
 

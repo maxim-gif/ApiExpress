@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node src/api.js",
+    "start": "node src/api.js",
     "dev": "nodemon src/api.js"
+ 
   },
   "author": "",
   "license": "ISC",
